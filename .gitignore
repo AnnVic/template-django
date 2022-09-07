@@ -1,0 +1,7 @@
+/.idea
+.env
+/.mypy_cache
+./venv
+/manage.py
+/staticfiles
+/logs
