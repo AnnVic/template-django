@@ -17,7 +17,6 @@ import environ
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Add env variables support
 # https://django-environ.readthedocs.io/en/latest/quickstart.html
 
@@ -41,7 +40,6 @@ WSGI_APPLICATION = "config.wsgi.application"
 # A string representing the full Python import path to your root URLconf.
 ROOT_URLCONF = "config.urls"
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -55,10 +53,11 @@ INSTALLED_APPS = [
     # External modules
     "rest_framework",
     "drf_yasg",
+    "rest_framework.authtoken",
+    "djoser",
     # Applications
-    # ...
+    "news.apps.NewsConfig",
 ]
-
 
 # Middleware
 # https://docs.djangoproject.com/en/4.0/topics/http/middleware/
@@ -92,7 +91,6 @@ TEMPLATES = [
     },
 ]
 
-
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
@@ -106,7 +104,6 @@ DATABASES = {
         "PORT": env.int("DB_PORT"),
     }
 }
-
 
 # Logging
 # https://docs.djangoproject.com/en/4.0/topics/logging/
@@ -134,25 +131,27 @@ LOGGING = {
     },
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+        "NAME":
+        "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+        "NAME":
+        "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
+        "NAME":
+        "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+        "NAME":
+        "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
@@ -165,12 +164,10 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
@@ -178,7 +175,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 STATIC_URL = "/staticfiles/"
 
 STATIC_ROOT = os.path.join(BASE_DIR.parent, "staticfiles")
-
 
 # DRF Settings
 # https://www.django-rest-framework.org/api-guide/settings/
@@ -191,13 +187,19 @@ REST_FRAMEWORK = {
     ),
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework.authentication.TokenAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
     ),
-    "DEFAULT_FILTER_BACKENDS": ("django_filters.rest_framework.DjangoFilterBackend",),
+    "DEFAULT_FILTER_BACKENDS":
+    ("django_filters.rest_framework.DjangoFilterBackend", ),
     "DEFAULT_PERMISSION_CLASSES": [],
-    "PAGE_SIZE": 20,
-    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-    "DATETIME_FORMAT": "%s",
-    "DATE_FORMAT": "%s",
+    "PAGE_SIZE":
+    20,
+    "DEFAULT_PAGINATION_CLASS":
+    "rest_framework.pagination.PageNumberPagination",
+    "DATETIME_FORMAT":
+    "%s",
+    "DATE_FORMAT":
+    "%s",
 }
 
 CELERY_BROKER_URL = f'redis://:{env.str("REDIS_PASSWORD")}@{env.str("REDIS_HOST")}:{env.str("REDIS_PORT")}/{env.str("REDIS_DB")}'
