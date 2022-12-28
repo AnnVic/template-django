@@ -17,11 +17,12 @@ from typing import Any
 
 from django.contrib import admin
 from django.urls import path, re_path, include
-from news.views import CategoryViewSet, ArticleViewSet, CommentViewSet
+from rest_framework import permissions
 from rest_framework.routers import DefaultRouter
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
-from rest_framework import permissions
+from news.views import CategoryViewSet, ArticleViewSet
+from comments.views import CommentViewSet
 
 schema_view: Any = get_schema_view(
     openapi.Info(
@@ -33,7 +34,7 @@ schema_view: Any = get_schema_view(
         license=openapi.License(name="BSD License"),
     ),
     public=True,
-    permission_classes=(permissions.AllowAny, ),
+    permission_classes=(permissions.AllowAny,),
 )
 router = DefaultRouter()
 router.register(r"categories", CategoryViewSet, basename="categories")
@@ -43,8 +44,8 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include(router.urls)),
     path("api-auth/", include("rest_framework.urls")),
-    path("auth/", include('djoser.urls')),
-    re_path(r'^auth/', include('djoser.urls.authtoken')),
+    path("auth/", include("djoser.urls")),
+    re_path(r"^auth/", include("djoser.urls.authtoken")),
     # Swagger urls
     re_path(
         r"^swagger(?P<format>\.json|\.yaml)$",
@@ -56,7 +57,7 @@ urlpatterns = [
         schema_view.with_ui("swagger", cache_timeout=0),
         name="schema-swagger-ui",
     ),
-    re_path(r"^redoc/$",
-            schema_view.with_ui("redoc", cache_timeout=0),
-            name="schema-redoc"),
+    re_path(
+        r"^redoc/$", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"
+    ),
 ]

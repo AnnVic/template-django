@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     "djoser",
     # Applications
     "news.apps.NewsConfig",
+    "comments.apps.CommentsConfig",
 ]
 
 # Middleware
@@ -136,20 +137,16 @@ LOGGING = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME":
-        "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        "NAME":
-        "django.contrib.auth.password_validation.MinimumLengthValidator",
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        "NAME":
-        "django.contrib.auth.password_validation.CommonPasswordValidator",
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        "NAME":
-        "django.contrib.auth.password_validation.NumericPasswordValidator",
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
@@ -189,17 +186,12 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.TokenAuthentication",
         "rest_framework.authentication.SessionAuthentication",
     ),
-    "DEFAULT_FILTER_BACKENDS":
-    ("django_filters.rest_framework.DjangoFilterBackend", ),
+    "DEFAULT_FILTER_BACKENDS": ("django_filters.rest_framework.DjangoFilterBackend",),
     "DEFAULT_PERMISSION_CLASSES": [],
-    "PAGE_SIZE":
-    20,
-    "DEFAULT_PAGINATION_CLASS":
-    "rest_framework.pagination.PageNumberPagination",
-    "DATETIME_FORMAT":
-    "%s",
-    "DATE_FORMAT":
-    "%s",
+    "PAGE_SIZE": 20,
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "DATETIME_FORMAT": "%s",
+    "DATE_FORMAT": "%s",
 }
 
 CELERY_BROKER_URL = f'redis://:{env.str("REDIS_PASSWORD")}@{env.str("REDIS_HOST")}:{env.str("REDIS_PORT")}/{env.str("REDIS_DB")}'

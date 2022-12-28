@@ -1,10 +1,10 @@
-from rest_framework import viewsets
-from .permissions import IsAdminOrReadOnly, IsAuthorOrReadOnly
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
-from django.contrib.auth import get_user_model
-from .models import Article, Category, Comment
-from .serializers import ArticleSerializer, CategorySerializer, CommentSerializer
+# pylint: disable=too-many-ancestors
 from typing import Any
+from rest_framework import viewsets
+from rest_framework.response import Response
+from .permissions import IsAdminOrReadOnly
+from .models import Article, Category
+from .serializers import ArticleSerializer, CategorySerializer
 
 # Create your views here.
 
@@ -12,28 +12,18 @@ from typing import Any
 class ArticleViewSet(viewsets.ModelViewSet):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
-    permission_classes = [IsAdminOrReadOnly]
+    permission_classes = (IsAdminOrReadOnly,)
 
-    def retrieve(self, request: Any, *args: Any, **kwargs: Any) -> Any:
+    def retrieve(
+        self, request: Any, *args: tuple[str], **kwargs: dict[str, Any]
+    ) -> Response:
         obj = self.get_object()
         obj.views = obj.views + 1
-        obj.save(update_fields=("views", ))
+        obj.save(update_fields=("views",))
         return super().retrieve(request, *args, **kwargs)
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = [IsAdminOrReadOnly]
-
-
-class CommentViewSet(viewsets.ModelViewSet):
-    queryset = Comment.objects.all()
-    serializer_class = CommentSerializer
-    permission_classes = [
-        IsAuthorOrReadOnly,
-        IsAuthenticatedOrReadOnly,
-    ]
-
-    def perform_create(self, serializer: Any) -> Any:
-        serializer.save(author=self.request.user)
+    permission_classes = (IsAdminOrReadOnly,)
